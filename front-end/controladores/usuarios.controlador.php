@@ -1,4 +1,5 @@
 <?php 
+//error_reporting(0);
 
 class ControladorUsuarios{
 
@@ -35,11 +36,10 @@ class ControladorUsuarios{
 				curl_close($ch);
 
 				$obj = json_decode($result);
+				$resultado = $obj->AuthenticationResult;
+				$token = $resultado->IdToken;
 
-				if($obj!= NULL){
-
-					$respuesta = $obj->AuthenticationResult;
-					$token = $respuesta->IdToken;
+				if($resultado!= NULL){
 
 					$_SESSION["iniciarSesion"] = "ok";
 					$_SESSION["tipo"] = $_POST["tipo"];
@@ -50,7 +50,7 @@ class ControladorUsuarios{
 						window.location = "inicio";
 
 					</script>';
-
+					
 				}else{
 
 					echo '<br><div class="alert alert-danger">Error al ingresar, vuelve a intentarlo</div>';
@@ -468,7 +468,7 @@ class ControladorUsuarios{
 				//Agregamos los encabezados del contenido
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json",$token));
 				//Ejecutamos la petición				
-
+				$result = curl_exec($ch);
 				curl_close($ch);
 
 				$obj = json_decode($result);
@@ -481,7 +481,7 @@ class ControladorUsuarios{
 					swal({
 
 						type: "success",
-						title: "¡El usuario ha sido guardado correctamente'.$obj->data.'",
+						title: "¡El producto se registro correctamente",
 						showConfirmButton: true,
 						confirmButtonText: "Cerrar",
 						closeOnConfirm: false
@@ -506,7 +506,7 @@ class ControladorUsuarios{
 					swal({
 
 						type: "error",
-						title: "¡El usuario ya se encuentra registrado",
+						title: "¡El producto ya se encuentra registrado",
 						showConfirmButton: true,
 						confirmButtonText: "Cerrar",
 						closeOnConfirm: false
@@ -531,7 +531,7 @@ class ControladorUsuarios{
 					swal({
 
 						type: "error",
-						title: "¡El usuario no puede ir vacio o llevar caracteres especiales",
+						title: "¡El producto no se registro por datos invalidos",
 						showConfirmButton: true,
 						confirmButtonText: "Cerrar",
 						closeOnConfirm: false
@@ -672,6 +672,203 @@ class ControladorUsuarios{
 		}
 
 	}
+
+	public function ctrIntroducirCompra(){
+
+		if(isset($_POST["numFactura"] ) ) {
+						
+			if(preg_match('/^[a-zA-Z0-9]+$/', $_POST["numFactura"]) &&
+			   preg_match('/^[0-9]+$/', $_POST["proveedor"]) && 
+			   preg_match('/^[0-9\/]+$/',$_POST["fecha"]) &&
+			   preg_match('/^[a-zA-Z]+$/',$_POST["nuevoMarca"]) &&
+			   preg_match('/^[a-zA-Z]+$/', $_POST["nuevoProveedor"]) && 
+			   preg_match('/^[a-zA-Z]+$/', $_POST["nuevoCategoria"]) && 
+			   preg_match('/^[0-9]+$/', $_POST["nuevoCantidad"]) && 
+			   preg_match('/^[0-9]+$/',$_POST["nuevoPrecioCompra"]) ){
+
+				$datos = array("codigo"=> $_POST["nuevoCodigo"],
+							   "descripcion"=> $_POST["nuevoDescripcion"],	
+				               "foto"=> "#",		   
+				               "marca"=> $_POST["nuevoMarca"],	
+				               "proveedor"=> $_POST["nuevoProveedor"],
+				               "categoria"=> $_POST["nuevoCategoria"],	
+				               "nombre"=> $_POST["nuevoProducto"],	
+				               "cantidad"=> $_POST["nuevoCantidad"],
+				               "precio_compra"=> $_POST["nuevoPrecioCompra"]
+				           );
+
+				$url = 'https://km29vlujn4.execute-api.us-east-2.amazonaws.com/api/productos/v0';
+				//create a new cURL resource
+				$ch = curl_init($url);
+				//setup request to send json via POST
+				$payload = json_encode(array("data" => $datos));
+				//Indicamos que nuestra petición sera Post
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);				 
+				//Adjuntamos el json a nuestra petición
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+				$token = "TokenID: ".$_SESSION["token"]; 
+				//Agregamos los encabezados del contenido
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json",$token));
+				//Ejecutamos la petición				
+				$result = curl_exec($ch);
+				curl_close($ch);
+
+				$obj = json_decode($result);
+
+				$respuesta = $obj->response;
+
+				if( $respuesta== 'ok'){
+					echo '<script>
+
+					swal({
+
+						type: "success",
+						title: "¡El producto se registro correctamente",
+						showConfirmButton: true,
+						confirmButtonText: "Cerrar",
+						closeOnConfirm: false
+
+					}).then((result)=>{
+
+						if(result.value){
+
+							window.location = "productos";
+
+						}
+
+					});
+
+				</script>';
+
+				}
+
+				if( $respuesta == 'error'){
+					echo '<script>
+
+					swal({
+
+						type: "error",
+						title: "¡El producto ya se encuentra registrado",
+						showConfirmButton: true,
+						confirmButtonText: "Cerrar",
+						closeOnConfirm: false
+
+					}).then((result)=>{
+
+						if(result.value){
+
+							window.location = "productos";
+
+						}
+
+					});
+
+					</script>';
+				}
+
+			}else{
+
+				echo '<script>
+
+					swal({
+
+						type: "error",
+						title: "¡El producto no se registro por datos invalidos",
+						showConfirmButton: true,
+						confirmButtonText: "Cerrar",
+						closeOnConfirm: false
+
+					}).then((result)=>{
+
+						if(result.value){
+
+							window.location = "productos";
+
+						}
+
+					});
+
+				</script>';
+
+			}
+			
+		
+		}
+	
+	}
+
+	public function ctrRegistroCompra(){
+
+		if(isset($_FILES["nuevoArchivo"]["tmp_name"])){
+
+			$data1 = new Spreadsheet_Excel_Reader();
+			$data1->setOutputEncoding('CP1251');
+			$data1->read($_FILES["nuevoArchivo"]["tmp_name"]);
+
+		$arraylistado = [];
+
+		for ($i = 1; $i <= $data1->sheets[0]['numRows']; $i++) {
+			for ($j = 1; $j <= $data1->sheets[0]['numCols']; $j++) {
+				$arraylistado[]=$data1->sheets[0]['cells'][$i][$j];
+			}
+		}
+
+
+			
+					echo '<script>
+
+					swal({
+
+						type: "success",
+						title: "¡El usuario ha sido guardado correctamente '.$arraylistado[5].'",
+						showConfirmButton: true,
+						confirmButtonText: "Cerrar",
+						closeOnConfirm: false
+
+					}).then((result)=>{
+
+						if(result.value){
+
+							window.location = "compras";
+
+						}
+
+					});
+
+				</script>';
+
+				//}
+
+				if( $respuesta == 'error'){
+					echo '<script>
+
+					swal({
+
+						type: "error",
+						title: "¡El usuario ya se encuentra registrado",
+						showConfirmButton: true,
+						confirmButtonText: "Cerrar",
+						closeOnConfirm: false
+
+					}).then((result)=>{
+
+						if(result.value){
+
+							window.location = "compras";
+
+						}
+
+					});
+
+					</script>';
+				}
+
+
+		}
+
+	}
+
 	
 }
 

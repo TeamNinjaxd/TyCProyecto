@@ -70,7 +70,7 @@ session_start();
   <script src="vistas/bower_components/datatables.net-bs/js/responsive.bootstrap.min.js"></script>
 
   <!-- SweetAlert 2-->
-  <script src="vistas/plugins/SweetAlert2/SweetAlert2.all.js"></script>
+  <script src="vistas/plugins/sweetalert2/sweetalert2.all.js"></script>
 
   <script src="vistas/plugins/iCheck/icheck.min.js"></script>
 
@@ -115,9 +115,11 @@ CUERPO DOCUMENTO
       if($_GET["ruta"] == "inicio" ||
          $_GET["ruta"] == "usuariosindividual" ||
          $_GET["ruta"] == "precioVenta" ||
+         $_GET["ruta"] == "compras" ||
          $_GET["ruta"] == "usuariosempresa" ||
          $_GET["ruta"] == "usuariosproveedor" ||
          $_GET["ruta"] == "productos" ||
+         $_GET["ruta"] == "movimientos" ||
          $_GET["ruta"] == "salir"){
 
         include "modulos/".$_GET["ruta"].".php";

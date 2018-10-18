@@ -47,6 +47,7 @@
               <th>Telefono</th>
               <th>Direccion</th>
               <th>Estado</th>
+              <th>Acciones</th>
 
             </tr>
 
@@ -63,6 +64,17 @@
               <td>5820221</td>
               <td>Rio Amazonas 196 - Las Moras</td>
               <td><button class="btn btn-success btn-xs">Activado</button></td>
+              <td>
+
+              <div class="btn-group">
+                  
+                <button class="btn btn-warning"><i class="fa fa-pencil"></i></button>
+
+                <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+
+              </div>  
+
+            </td>
 
             </tr>
 
@@ -75,6 +87,17 @@
               <td>5820221</td>
               <td>Su casa</td>
               <td><button class="btn btn-danger btn-xs">Desactivado</button></td>
+              <td>
+
+              <div class="btn-group">
+                  
+                <button class="btn btn-warning"><i class="fa fa-pencil"></i></button>
+
+                <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+
+              </div>  
+
+            </td>
 
             </tr>
           

@@ -28,10 +28,21 @@
 
 			<li>
 
+				<a href="compras">
+
+					<i class="fa fa-edit"></i>
+					<span>Registro de Compras</span>
+
+				</a>
+
+			</li>
+
+			<li>
+
 				<a href="productos">
 
-					<i class="fa fa-list"></i>
-					<span>Registro de Compras</span>
+					<i class="fa fa-book"></i>
+					<span>Agregar Productos</span>
 
 				</a>
 
@@ -43,6 +54,17 @@
 
 					<i class="fa fa-money"></i>
 					<span>Registrar Precio de Venta</span>
+
+				</a>
+
+			</li>
+
+			<li>
+
+				<a href="movimientos">
+
+					<i class="fa fa-exchange"></i>
+					<span>Movimientos en Almacen</span>
 
 				</a>
 
