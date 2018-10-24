@@ -34,17 +34,17 @@
 
       <div class="box-body">
         
-        <table class="table table-bordered table-striped dt-responsive tablas">
+       <table class="table table-bordered table-striped dt-responsive tablas">
           
           <thead>
             
             <tr>
 
               <th style="width:10px">#</th>
+              <th>RUC</th>
               <th>Nombre</th>
-              <th>DNI</th>
               <th>Correo</th>
-              <th>Telefono</th>
+              <th>Celular</th>
               <th>Direccion</th>
               <th>Estado</th>
               <th>Acciones</th>
@@ -55,51 +55,47 @@
 
           <tbody>
 
-            <tr>
-              
-              <td>1</td>
-              <td>Jesus Villa</td>
-              <td>78945612</td>
-              <td>jesus.villa@unmsm.edu.pe</td>
-              <td>5820221</td>
-              <td>Rio Amazonas 196 - Las Moras</td>
-              <td><button class="btn btn-success btn-xs">Activado</button></td>
-              <td>
+               <?php
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_URL, 'https://km29vlujn4.execute-api.us-east-2.amazonaws.com/api/proveedores/v0');
+                $token = "TokenID: ".$_SESSION["token"]; 
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json",$token));
+                $result = curl_exec($ch);
+                curl_close($ch);
+                $arrayObj = json_decode($result);
+                $arrayData = $arrayObj->data;
+                $proveedoresArray = $arrayData->productos;
+                $i=0;
+                foreach ($proveedoresArray as $key => $value){
+                echo '
+                  <tr>
+                    <td>'.($i+1).'</td>
+                    <td>'.$proveedoresArray[$i]->RUC.'</td>
+                    <td>'.$proveedoresArray[$i]->nombre.'</td>
+                    <td>'.$proveedoresArray[$i]->correo.'</td>
+                    <td>'.$proveedoresArray[$i]->celular.'</td>
+                    <td>'.$proveedoresArray[$i]->direccion.'</td>
+                    <td><button class="btn btn-success btn-xs">Activado</button></td>
+                    <td>
 
-                <div class="btn-group">
+                      <div class="btn-group">
+                          
+                        <button class="btn btn-warning"><i class="fa fa-pencil"></i></button>
+
+                        <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+
+                      </div>  
+
+                    </td>
                     
-                  <button class="btn btn-warning"><i class="fa fa-pencil"></i></button>
-
-                  <button class="btn btn-danger"><i class="fa fa-times"></i></button>
-
-                </div>  
-
-              </td>
-
-            </tr>
-
-            <tr>
-              
-              <td>2</td>
-              <td>Paolo Ramirez</td>
-              <td>78945612</td>
-              <td>paolo.ramirez@unmsm.edu.pe</td>
-              <td>5820221</td>
-              <td>Su casa</td>
-              <td><button class="btn btn-danger btn-xs">Desactivado</button></td>
-              <td>
-
-                <div class="btn-group">
-                    
-                  <button class="btn btn-warning"><i class="fa fa-pencil"></i></button>
-
-                  <button class="btn btn-danger"><i class="fa fa-times"></i></button>
-
-                </div>  
-
-              </td>
-
-            </tr>
+                  </tr>
+                ';
+                $i=$i+1;
+                }
+                              
+                ?>
           
           </tbody>
 

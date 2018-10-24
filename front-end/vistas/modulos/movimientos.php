@@ -32,7 +32,6 @@
 
       </div>
 
-
     </div>
 
   </section>
@@ -40,7 +39,7 @@
 </div>
 
 <!--=====================================
-MODAL REGISTRAR Movimiento
+MODAL REGISTRAR MOVIMIENTO
 ======================================-->
 
 

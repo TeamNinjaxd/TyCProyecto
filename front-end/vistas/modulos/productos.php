@@ -34,7 +34,7 @@
 
       <div class="box-body">
         
-        <table class="table table-bordered table-striped dt-responsive tablas">
+       <table class="table table-bordered table-striped dt-responsive tablas">
           
           <thead>
             
@@ -43,13 +43,11 @@
               <th style="width:10px">#</th>
               <th>Codigo</th>
               <th>Nombre</th>
-              <th>Descripcion</th>
               <th>Foto</th>
-              <th>Marca</th>
-              <th>Proveedor</th>
+              <th>Descripcion</th>
               <th>Categoria</th>
-              <th>Cantidad</th>
-              <th>Precio de Compra</th>
+              <th>Proveedor</th>
+              <th>Marca</th>
 
             </tr>
 
@@ -57,20 +55,37 @@
 
           <tbody>
 
-            <tr>
-              
-              <td>1</td>
-              <td>AAA000</td>
-              <td>CRL 1000</td>
-              <td>Control remoto con rayos laser</td>
-              <td><img src="vistas/img/usuarios/default/anonymous.png" class="img-thumbnail" width="40px" ></td>
-              <td>KROHNE</td>
-              <td>EJM Proveedor</td>
-              <td>EJM Categoria</td>
-              <td>10</td>
-              <td>100</td>
-
-            </tr>
+               <?php
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_URL, 'https://km29vlujn4.execute-api.us-east-2.amazonaws.com/api/productos/v0');
+                $token = "TokenID: ".$_SESSION["token"]; 
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json",$token));
+                $result = curl_exec($ch);
+                curl_close($ch);
+                $arrayObj = json_decode($result);
+                $arrayData = $arrayObj->data;
+                $proveedoresArray = $arrayData->productos;
+                $i=0;
+                foreach ($proveedoresArray as $key => $value){
+                echo '
+                  <tr>
+                    <td>'.($i+1).'</td>
+                    <td>'.$proveedoresArray[$i]->Codigo.'</td>
+                    <td>'.$proveedoresArray[$i]->Nombre.'</td>
+                    <td>'.$proveedoresArray[$i]->Foto.'</td>
+                    <td>'.$proveedoresArray[$i]->Descripcion.'</td>
+                    <td>'.$proveedoresArray[$i]->Categoria.'</td>
+                    <td>'.$proveedoresArray[$i]->Proveedor.'</td>
+                    <td>'.$proveedoresArray[$i]->Marca.'</td>
+                    
+                  </tr>
+                ';
+                $i=$i+1;
+                }
+                              
+                ?>
           
           </tbody>
 

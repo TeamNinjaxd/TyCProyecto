@@ -32,6 +32,61 @@
 
       </div>
 
+      <div class="box-body">
+        
+       <table class="table table-bordered table-striped dt-responsive tablas">
+          
+          <thead>
+            
+            <tr>
+
+              <th style="width:10px">#</th>
+              <th>Codigo</th>
+              <th>Nombre</th>
+              <th>Foto</th>
+              <th>Marca</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+               <?php
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_URL, 'https://km29vlujn4.execute-api.us-east-2.amazonaws.com/api/productos/v0');
+                $token = "TokenID: ".$_SESSION["token"]; 
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json",$token));
+                $result = curl_exec($ch);
+                curl_close($ch);
+                $arrayObj = json_decode($result);
+                $arrayData = $arrayObj->data;
+                $proveedoresArray = $arrayData->productos;
+                $i=0;
+                foreach ($proveedoresArray as $key => $value){
+                echo '
+                  <tr>
+                    <td>'.($i+1).'</td>
+                    <td>'.$proveedoresArray[$i]->Codigo.'</td>
+                    <td>'.$proveedoresArray[$i]->Nombre.'</td>
+                    <td>'.$proveedoresArray[$i]->Foto.'</td>
+                    <td>'.$proveedoresArray[$i]->Marca.'</td>
+                    
+                  </tr>
+                ';
+                $i=$i+1;
+                }
+                              
+                ?>
+          
+          </tbody>
+
+        </table>
+
+      </div>
+
 
     </div>
 
