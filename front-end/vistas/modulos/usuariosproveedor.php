@@ -66,7 +66,7 @@
                 curl_close($ch);
                 $arrayObj = json_decode($result);
                 $arrayData = $arrayObj->data;
-                $proveedoresArray = $arrayData->productos;
+                $proveedoresArray = $arrayData->proveedores;
                 $i=0;
                 foreach ($proveedoresArray as $key => $value){
                 echo '

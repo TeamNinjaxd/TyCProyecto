@@ -66,19 +66,19 @@
                 curl_close($ch);
                 $arrayObj = json_decode($result);
                 $arrayData = $arrayObj->data;
-                $proveedoresArray = $arrayData->productos;
+                $productosArray = $arrayData->productos;
                 $i=0;
-                foreach ($proveedoresArray as $key => $value){
+                foreach ($productosArray as $key => $value){
                 echo '
                   <tr>
                     <td>'.($i+1).'</td>
-                    <td>'.$proveedoresArray[$i]->Codigo.'</td>
-                    <td>'.$proveedoresArray[$i]->Nombre.'</td>
-                    <td>'.$proveedoresArray[$i]->Foto.'</td>
-                    <td>'.$proveedoresArray[$i]->Descripcion.'</td>
-                    <td>'.$proveedoresArray[$i]->Categoria.'</td>
-                    <td>'.$proveedoresArray[$i]->Proveedor.'</td>
-                    <td>'.$proveedoresArray[$i]->Marca.'</td>
+                    <td>'.$productosArray[$i]->Codigo.'</td>
+                    <td>'.$productosArray[$i]->Nombre.'</td>
+                    <td>'.$productosArray[$i]->Foto.'</td>
+                    <td>'.$productosArray[$i]->Descripcion.'</td>
+                    <td>'.$productosArray[$i]->Categoria.'</td>
+                    <td>'.$productosArray[$i]->Proveedor.'</td>
+                    <td>'.$productosArray[$i]->Marca.'</td>
                     
                   </tr>
                 ';
