@@ -868,6 +868,34 @@ class ControladorUsuarios{
 		}
 
 	}
+	
+
+	public function ctrModificarProveedor(){
+
+				$datos = array("RUC"=> "00345678910",
+				               "celular"=> "015820221"
+				           );
+
+				$url = 'https://km29vlujn4.execute-api.us-east-2.amazonaws.com/api/proveedores/v0';
+				//create a new cURL resource
+				$ch = curl_init($url);
+				//setup request to send json via POST
+				$payload = json_encode(array("data" => $datos));
+				//Indicamos que nuestra petición sera Post
+				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);				 
+				//Adjuntamos el json a nuestra petición
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $payload); 
+				$token = "TokenID: ".$_SESSION["token"]; 
+				//Agregamos los encabezados del contenido
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json",$token));
+				//Ejecutamos la petición		
+				$result = curl_exec($ch);
+
+				curl_close($ch);
+
+				
+	}
 
 	
 }

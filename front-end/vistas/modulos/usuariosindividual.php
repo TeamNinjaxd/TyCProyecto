@@ -34,7 +34,7 @@
 
       <div class="box-body">
         
-        <table class="table table-bordered table-striped dt-responsive tablas">
+       <table class="table table-bordered table-striped dt-responsive tablas">
           
           <thead>
             
@@ -43,11 +43,10 @@
               <th style="width:10px">#</th>
               <th>Nombre</th>
               <th>DNI</th>
-              <th>Correo</th>
-              <th>Telefono</th>
-              <th>Direccion</th>
-              <th>Estado</th>
-              <th>Acciones</th>
+              <th>email</th>
+              <th>telefono</th>
+              <th>situacion</th>
+              <th>Confirmacion</th>
 
             </tr>
 
@@ -55,51 +54,47 @@
 
           <tbody>
 
-            <tr>
-              
-              <td>1</td>
-              <td>Jesus Villa</td>
-              <td>78945612</td>
-              <td>jesus.villa@unmsm.edu.pe</td>
-              <td>5820221</td>
-              <td>Rio Amazonas 196 - Las Moras</td>
-              <td><button class="btn btn-success btn-xs">Activado</button></td>
-              <td>
+               <?php
+                $datos=array("ruta"=>$_GET["ruta"]);
+                $json=json_encode($datos);
 
-              <div class="btn-group">
-                  
-                <button class="btn btn-warning"><i class="fa fa-pencil"></i></button>
+                $ch = curl_init('https://km29vlujn4.execute-api.us-east-2.amazonaws.com/api/users/v0/clientes/');
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                
+                
+                
 
-                <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-              </div>  
+               
 
-            </td>
-
-            </tr>
-
-            <tr>
-              
-              <td>2</td>
-              <td>Paolo Ramirez</td>
-              <td>78945612</td>
-              <td>paolo.ramirez@unmsm.edu.pe</td>
-              <td>5820221</td>
-              <td>Su casa</td>
-              <td><button class="btn btn-danger btn-xs">Desactivado</button></td>
-              <td>
-
-              <div class="btn-group">
-                  
-                <button class="btn btn-warning"><i class="fa fa-pencil"></i></button>
-
-                <button class="btn btn-danger"><i class="fa fa-times"></i></button>
-
-              </div>  
-
-            </td>
-
-            </tr>
+                $token = "TokenID: ".$_SESSION["token"];
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json",$token));
+                $result = curl_exec($ch);
+                curl_close($ch);
+                $arrayObj = json_decode($result);
+                echo var_dump($arrayObj);
+                echo var_dump($datos);
+                $arrayData = $arrayObj->data;
+                $clientesiArray = $arrayData->clientes;
+                $i=0;
+                foreach ($clientesiArray as $key => $value){
+                  echo '
+                    <tr>
+                      <td>'.($i+1).'</td>
+                      <td>'.$clientesiArray[$i]->name.'</td>
+                      <td>'.$clientesiArray[$i]->Username.'</td>
+                      <td>'.$clientesiArray[$i]->email.'</td>
+                      <td>'.$clientesiArray[$i]->phone_number.'</td>
+                      <td>'.$clientesiArray[$i]->Enabled.'</td>
+                      <td>'.$clientesiArray[$i]->UserStatus.'</td>
+                      
+                    </tr>
+                  ';
+                  $i=$i+1;
+                }
+                              
+                ?>
           
           </tbody>
 
